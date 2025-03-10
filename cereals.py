@@ -97,21 +97,24 @@ from selenium.common.exceptions import (
 )
 from selenium_stealth import stealth
 
-# Setup Chrome options for headless operation in Google Colab
 chrome_options = Options()
-chrome_options.add_argument("--headless")  # Run Chrome in headless mode
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("start-maximized")
-chrome_options.add_argument("--disable-extensions")
-chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-chrome_options.add_experimental_option('useAutomationExtension', False)
+options = [
+    "--headless",
+    "--disable-gpu",
+    "--window-size=1920,1200",
+    "--ignore-certificate-errors",
+    "--disable-extensions",
+    "--no-sandbox",
+    "--disable-dev-shm-usage"
+]
+for option in options:
+    chrome_options.add_argument(option)
 
-# Path to chromedriver installed in Colab
-service = Service('/usr/bin/chromedriver')
+# Use ChromeDriverManager to install ChromeDriver
+chrome_service = Service(ChromeDriverManager().install())
 
 # Create the WebDriver instance
-driver = webdriver.Chrome(service=service, options=chrome_options)
+driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
 
 # Apply stealth techniques to bypass bot detection
 stealth(driver,
