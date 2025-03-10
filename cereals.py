@@ -83,53 +83,7 @@ import time
 import random
 import pandas as pd
 from datetime import date
-
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import (
-    StaleElementReferenceException,
-    TimeoutException,
-    NoSuchElementException
-)
-from selenium_stealth import stealth
-
-chrome_options = Options()
-options = [
-    "--headless",
-    "--disable-gpu",
-    "--window-size=1920,1200",
-    "--ignore-certificate-errors",
-    "--disable-extensions",
-    "--no-sandbox",
-    "--disable-dev-shm-usage"
-]
-for option in options:
-    chrome_options.add_argument(option)
-
-# Use ChromeDriverManager to install ChromeDriver
-chrome_service = Service(ChromeDriverManager().install())
-
-# Create the WebDriver instance
-driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
-
-# Apply stealth techniques to bypass bot detection
-stealth(driver,
-        languages=["en-US", "en"],
-        vendor="Google Inc.",
-        platform="Win32",
-        webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine",
-        fix_hairline=True)
-
-# The URL you want to scrape
-url = "https://www.luluhypermarket.com/en-ae"
-driver.get(url)
-driver.maximize_window()
-driver.get(url)
+from seleniumbase import SB
 
 # Global lists for storing scraped data
 product_names = []
@@ -143,57 +97,41 @@ def get_text_safe(element, retries=3):
             text = element.text.strip()
             if text:
                 return text
-        except StaleElementReferenceException:
+        except Exception:  # Handling all exceptions, not just StaleElementReferenceException
             time.sleep(0.5)  # Brief pause before retrying
     return ""
 
-def loading_data():
+def loading_data(sb):
     # Short random sleep to mimic human behavior and allow page updates
     time.sleep(random.randint(1, 3))
-    driver.implicitly_wait(5)
-    wait = WebDriverWait(driver, 30)
-
+    
     # Wait for key product and price elements to appear
     try:
-      wait.until(EC.presence_of_element_located((
-          By.XPATH, '//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "line-clamp-2")]'
-      )))
-      wait.until(EC.presence_of_element_located((
-          By.XPATH, '//span[contains(@class, "text-base") and contains(@class, "leading-[1.5]") and contains(@class, "-tracking-[0.48px]")]'
-      )))
-      wait.until(EC.presence_of_element_located((
-          By.XPATH, '//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "line-clamp-2")]'
-      )))
+        sb.wait_for_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "line-clamp-2")]', timeout=30)
+        sb.wait_for_element('//span[contains(@class, "text-base") and contains(@class, "leading-[1.5]") and contains(@class, "-tracking-[0.48px]")]', timeout=30)
     except:
-      driver.refresh()
-      time.sleep(10)
-      wait.until(EC.presence_of_element_located((
-          By.XPATH, '//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "line-clamp-2")]'
-      )))
-      wait.until(EC.presence_of_element_located((
-          By.XPATH, '//span[contains(@class, "text-base") and contains(@class, "leading-[1.5]") and contains(@class, "-tracking-[0.48px]")]'
-      )))
+        sb.refresh()
+        time.sleep(10)
+        sb.wait_for_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "line-clamp-2")]', timeout=30)
+        sb.wait_for_element('//span[contains(@class, "text-base") and contains(@class, "leading-[1.5]") and contains(@class, "-tracking-[0.48px]")]', timeout=30)
+    
     # Retrieve the category text freshly using an appropriate selector
     try:
-        category = driver.find_element(By.CSS_SELECTOR, ".text-lg.font-bold.text-black").text.strip()
+        category = sb.get_text(".text-lg.font-bold.text-black")
     except Exception:
         category = "unknown"
     print(category)
 
-    # Immediately extract text values from product and price elements
-    product_elements = driver.find_elements(By.XPATH,
-        '//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]'
-    )
-    price_elements = driver.find_elements(By.XPATH,
-        '//span[contains(@class, "text-base") and contains(@class, "leading-[1.5]") and contains(@class, "-tracking-[0.48px]")]'
-    )
+    # Extract product names and prices
+    product_elements = sb.find_elements('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]')
+    price_elements = sb.find_elements('//span[contains(@class, "text-base") and contains(@class, "leading-[1.5]") and contains(@class, "-tracking-[0.48px]")]')
 
     product_texts = []
     for product in product_elements:
         text = get_text_safe(product)
         if text:
             product_texts.append(text)
-            print(product.text)
+            print(text)
 
     price_texts = []
     for price in price_elements:
@@ -208,36 +146,79 @@ def loading_data():
     for text in price_texts:
         prices.append(text)
 
-def getting_data(url):
-    wait = WebDriverWait(driver, 30)
-    # Load the URL and wait for the page to settle
-    driver.get(url)
-    driver.maximize_window()
-    driver.execute_script("return document.body.scrollHeight")
-    loading_data()
+def getting_data(sb, url):
+    # Load the URL using UC mode's reconnect capability for better stealth
+    sb.uc_open_with_reconnect(url, 4)  # Attempt reconnection up to 4 times if needed
+    sb.maximize_window()
+    sb.execute_script("return document.body.scrollHeight")
+    loading_data(sb)
 
     # Loop through pagination if the ">" button exists
     while True:
-        tabs = driver.find_elements(By.XPATH,
-            '//a[contains(@class, "cursor-pointer") and contains(@class, "px-2") and contains(@class, "text-xs")]'
-        )
-        if tabs and tabs[-1].text == ">":
-            next_tab = [tab for tab in tabs][-1]
+        tabs = sb.find_elements('//a[contains(@class, "cursor-pointer") and contains(@class, "px-2") and contains(@class, "text-xs")]')
+        
+        if tabs and any(tab.text == ">" for tab in tabs):
             # Store a reference to an element on the current page
-            old_product = driver.find_element(
-                By.XPATH, '//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]'
-            )
-            # Wait until the pagination button is clickable, then click it
-            wait.until(EC.element_to_be_clickable((
-                By.XPATH, '//a[contains(@class, "cursor-pointer") and contains(@class, "text-xs")]'
-            )))
-            next_tab.click()
-            # Wait until the stored element is detached from the DOM
-            wait.until(EC.staleness_of(old_product))
-            loading_data()
-            time.sleep(2)
+            try:
+                old_product = sb.find_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]')
+                old_product_text = get_text_safe(old_product)
+            except:
+                old_product_text = ""
+            
+            # Find and click the ">" button
+            for tab in tabs:
+                if tab.text == ">":
+                    tab.click()
+                    break
+            
+            # Wait for page to update
+            sb.sleep(2)  # Basic wait for page transition
+            
+            # If we had a reference element, wait until it's no longer visible
+            if old_product_text:
+                try:
+                    sb.wait_for_text_not_visible(old_product_text, timeout=10)
+                except:
+                    pass  # Continue even if waiting fails
+            
+            # Load data from the new page
+            loading_data(sb)
         else:
             break
+
+# Main execution
+with SB(uc=True, headless=True) as sb:
+    # Configure window size
+    sb.driver.set_window_size(1920, 1200)
+    
+    # The base URL
+    url = "https://www.luluhypermarket.com/en-ae"
+    sb.open(url)
+    sb.maximize_window()
+    
+    # Process list of URLs
+    ids_to_extract = [
+        "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-oats-bars/",
+        "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-cereals/",
+        # Add the rest of your URLs here
+    ]
+    
+    block_2 = [
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-asian-bakery/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-croissant-and-savories-corner/",
+        # Add the rest of your block_2 URLs here
+    ]
+    
+    ids_to_extract = ids_to_extract + block_2
+    
+    for povezava in ids_to_extract:
+        getting_data(sb, povezava)
+    
+    # Now you can work with the extracted data
+    print(product_names)
+    print(prices)
+    print(categories)
+
 
 for povezava in ids_to_extract:
     getting_data(povezava)
