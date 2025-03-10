@@ -24,7 +24,12 @@ jobs:
       - name: Install a new Chromium
         run: sudo apt install -y chromium-browser
       - name: Install all necessary packages
-        run: pip install requests beautifulsoup4 pandas webdriver-manager selenium
+        run: |
+          pip install requests beautifulsoup4 pandas webdriver-manager selenium numpy==1.26.0 pandas==1.5.3
+          # Install selenium-stealth directly from GitHub repository
+          pip install git+https://github.com/diprajpatra/selenium-stealth
+          # As a fallback, also install seleniumbase which offers alternative stealth capabilities
+          pip install seleniumbase
       - name: Run the scraping script
         run: python cereals.py
       - name: Commit and push if changed
