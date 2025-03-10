@@ -229,3 +229,14 @@ driver.close()
 print(product_names)
 print(prices)
 print(categories)
+
+dataframe = pd.DataFrame({
+    "product_names": product_names,
+    "prices": prices,
+    "category": categories
+})
+dataframe = dataframe.set_index("product_names")
+
+today = date.today()
+filename = f"data_new_{today.day}{today.month}{today.year}.csv"
+dataframe.to_csv(f"/content/drive/MyDrive/{filename}")
