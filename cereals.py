@@ -1,84 +1,3 @@
-ids_to_extract = ["https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-oats-bars/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-cereals/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-jams-spreads/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-honey/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-canned-foods-canned-vegetables/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-canned-foods-canned-beans/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-canned-foods-canned-meat/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-canned-foods-canned-fish/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-rice-pasta-noodles-rice/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-rice-pasta-noodles-pasta-noodles/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-rice-pasta-noodles-soups/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-water/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-tea/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-coffee/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-softdrinks-juices/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-home-baking-sweeteners-home-baking/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-home-baking-sweeteners-sugar-other-sweeteners/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-biscuits-confectionery-biscuits/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-biscuits-confectionery-chocolates/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-biscuits-confectionery-candy/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-biscuits-confectionery-gums-mints/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-world-foods-arabic-food/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-world-foods-filipino-food/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-world-foods-indian-food/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-world-foods-korean-food/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-dressings-table-sauces-sides-salad-dressing-table-sauces/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-dressings-table-sauces-sides-bottled-olives-pickles/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-chips-snacks-chips/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-chips-snacks-snacks/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-chips-snacks-popcorn/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-chips-snacks-nuts-dates/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-frozen-food-ice-cream/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-frozen-food-ready-meals-snacks/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-frozen-food-burgers/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-frozen-food-pastry-sheets-dough/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-cooking-ingredients-cooking-sauces-cream/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-cooking-ingredients-oils-ghee/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-cooking-ingredients-salt-pepper/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-cooking-ingredients-pulses/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-speciality-food-speciality-food-organic/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-speciality-food-speciality-food-gluten-free/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-speciality-food-speciality-food-sugar-free/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-speciality-food-speciality-food-vegan/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-fresh-milk/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-long-life-milk/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-laban-flavoured-milk/",
-    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-dairy-alternatives/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-yoghurt-chilled-desserts/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-fresh-cream/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-cheese/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-butter-margarine/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-eggs/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-bread-basket/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-cake-house/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-arabic-bakery/"]
-block_2= ["https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-asian-bakery/","https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-croissant-and-savories-corner/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-healthy-bake-shop/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-delicatessen-cold-cuts-prepacked-cooked-meats/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-delicatessen-olives-pickles/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-delicatessen-indian-ready-mix/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-delicatessen-oriental-food/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-delicatessen-hummus-labneh-other-prepacked-deli/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fruits-vegetables-fruits/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fruits-vegetables-vegetables/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fruits-vegetables-salad-vegetables/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fruits-vegetables-fruit-cuts/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-meat-poultry-fresh-beef-veal/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-meat-poultry-fresh-lamb/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-meat-poultry-fresh-chicken/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-meat-poultry-other-fresh-meat/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-fish-seafoods-fresh-fish/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-fish-seafoods-shellfish-speciality-seafoods/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-fish-seafoods-smoked-fish-dried-fish/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-on-the-go-meals-desserts-sweets-chilled-meals/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-juice-salads-salads-pizzas/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-juice-salads-sandwiches-burgers/",
-    "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-juice-salads-fresh-juice/",
-    "https://gcc.luluhypermarket.com/en-ae/Pantry-Essentials/c/CPUAE0182",
-    "https://gcc.luluhypermarket.com/en-ae/Frozen-Foods/c/CPUAE0180"]
-ids_to_extract = ids_to_extract + block_2
-
 import time
 import random
 import pandas as pd
@@ -197,18 +116,85 @@ with SB(uc=True, headless=True) as sb:
     sb.maximize_window()
     
     # Process list of URLs
-    ids_to_extract = [
-        "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-oats-bars/",
-        "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-cereals/",
-        # Add the rest of your URLs here
-    ]
-    
-    block_2 = [
-        "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-asian-bakery/",
-        "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-croissant-and-savories-corner/",
-        # Add the rest of your block_2 URLs here
-    ]
-    
+    ids_to_extract = ["https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-oats-bars/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-cereals/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-jams-spreads/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-breakfast-spreads-honey/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-canned-foods-canned-vegetables/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-canned-foods-canned-beans/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-canned-foods-canned-meat/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-canned-foods-canned-fish/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-rice-pasta-noodles-rice/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-rice-pasta-noodles-pasta-noodles/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-rice-pasta-noodles-soups/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-water/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-tea/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-coffee/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-softdrinks-juices/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-home-baking-sweeteners-home-baking/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-home-baking-sweeteners-sugar-other-sweeteners/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-biscuits-confectionery-biscuits/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-biscuits-confectionery-chocolates/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-biscuits-confectionery-candy/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-biscuits-confectionery-gums-mints/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-world-foods-arabic-food/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-world-foods-filipino-food/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-world-foods-indian-food/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-world-foods-korean-food/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-dressings-table-sauces-sides-salad-dressing-table-sauces/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-dressings-table-sauces-sides-bottled-olives-pickles/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-chips-snacks-chips/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-chips-snacks-snacks/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-chips-snacks-popcorn/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-chips-snacks-nuts-dates/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-frozen-food-ice-cream/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-frozen-food-ready-meals-snacks/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-frozen-food-burgers/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-frozen-food-pastry-sheets-dough/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-cooking-ingredients-cooking-sauces-cream/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-cooking-ingredients-oils-ghee/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-cooking-ingredients-salt-pepper/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-cooking-ingredients-pulses/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-speciality-food-speciality-food-organic/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-speciality-food-speciality-food-gluten-free/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-speciality-food-speciality-food-sugar-free/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-speciality-food-speciality-food-vegan/",
+    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-fresh-milk/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-long-life-milk/",
+    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-laban-flavoured-milk/",
+    "https://gcc.luluhypermarket.com/en-ae/grocery-food-cupboard-beverage-dairy-alternatives/",
+    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-yoghurt-chilled-desserts/",
+    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-fresh-cream/",
+    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-cheese/",
+    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-butter-margarine/",
+    "https://gcc.luluhypermarket.com/en-ae/fresh-food-dairy-eggs-cheese-eggs/",
+    "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-bread-basket/",
+    "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-cake-house/",
+    "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-arabic-bakery/"]
+    block_2= ["https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-asian-bakery/","https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-croissant-and-savories-corner/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-bakery-healthy-bake-shop/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-delicatessen-cold-cuts-prepacked-cooked-meats/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-delicatessen-olives-pickles/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-delicatessen-indian-ready-mix/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-delicatessen-oriental-food/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-delicatessen-hummus-labneh-other-prepacked-deli/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fruits-vegetables-fruits/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fruits-vegetables-vegetables/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fruits-vegetables-salad-vegetables/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fruits-vegetables-fruit-cuts/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-meat-poultry-fresh-beef-veal/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-meat-poultry-fresh-lamb/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-meat-poultry-fresh-chicken/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-meat-poultry-other-fresh-meat/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-fish-seafoods-fresh-fish/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-fish-seafoods-shellfish-speciality-seafoods/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-fish-seafoods-smoked-fish-dried-fish/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-on-the-go-meals-desserts-sweets-chilled-meals/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-juice-salads-salads-pizzas/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-juice-salads-sandwiches-burgers/",
+        "https://gcc.luluhypermarket.com/en-ae/fresh-food-fresh-juice-salads-fresh-juice/",
+        "https://gcc.luluhypermarket.com/en-ae/Pantry-Essentials/c/CPUAE0182",
+        "https://gcc.luluhypermarket.com/en-ae/Frozen-Foods/c/CPUAE0180"]
     ids_to_extract = ids_to_extract + block_2
     
     for povezava in ids_to_extract:
@@ -218,25 +204,15 @@ with SB(uc=True, headless=True) as sb:
     print(product_names)
     print(prices)
     print(categories)
-
-
-for povezava in ids_to_extract:
-    getting_data(povezava)
-
-driver.close()
-
-
-print(product_names)
-print(prices)
-print(categories)
-
-dataframe = pd.DataFrame({
-    "product_names": product_names,
-    "prices": prices,
-    "category": categories
-})
-dataframe = dataframe.set_index("product_names")
-
-today = date.today()
-filename = f"data_new_{today.day}{today.month}{today.year}.csv"
-dataframe.to_csv(f"/content/drive/MyDrive/{filename}")
+    
+    # Create and save dataframe
+    dataframe = pd.DataFrame({
+        "product_names": product_names,
+        "prices": prices,
+        "category": categories
+    })
+    dataframe = dataframe.set_index("product_names")
+    
+    today = date.today()
+    filename = f"data_new_{today.day}{today.month}{today.year}.csv"
+    dataframe.to_csv(filename)  # Changed path for GitHub Actions environment
