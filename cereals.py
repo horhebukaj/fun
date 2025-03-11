@@ -24,97 +24,82 @@ def loading_data(sb):
     # Short random sleep to mimic human behavior and allow page updates
     time.sleep(random.randint(1, 3))
     
-    # Wait for key product and price elements to appear
+    # Wait for key product and price elements to appear using the exact same XPaths
     try:
         sb.wait_for_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "line-clamp-2")]', timeout=30)
         sb.wait_for_element('//span[contains(@class, "text-base") and contains(@class, "leading-[1.5]") and contains(@class, "-tracking-[0.48px]")]', timeout=30)
+        sb.wait_for_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "line-clamp-2")]', timeout=30)
     except:
         sb.refresh()
         time.sleep(10)
         sb.wait_for_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "line-clamp-2")]', timeout=30)
         sb.wait_for_element('//span[contains(@class, "text-base") and contains(@class, "leading-[1.5]") and contains(@class, "-tracking-[0.48px]")]', timeout=30)
     
-    # IMPROVED: More robust category detection with multiple approaches
-    category = "unknown"
+    # Using the exact same category selector that worked before
     try:
-        # Try direct find_element method (more similar to original implementation)
-        elements = sb.find_elements(".text-lg.font-bold.text-black")
-        if elements and len(elements) > 0:
-            category = elements[0].text.strip()
-            print(f"Found category using primary selector: {category}")
-    except Exception as e:
-        print(f"Primary category selector failed: {str(e)}")
-        try:
-            # Try breadcrumb navigation
-            breadcrumbs = sb.find_elements(".breadcrumb-item a")
-            if breadcrumbs and len(breadcrumbs) > 1:
-                category = breadcrumbs[-2].text.strip()
-                print(f"Found category using breadcrumbs: {category}")
-        except Exception as e:
-            print(f"Breadcrumb selector failed: {str(e)}")
-            try:
-                # Extract from URL as last resort
-                url_parts = sb.get_current_url().split('/')
-                for part in url_parts:
-                    if 'food' in part or 'grocery' in part:
-                        category = part.replace('-', ' ').title()
-                        break
-                print(f"Extracted category from URL: {category}")
-            except:
-                print("Failed to extract category")
-                category = "unknown"
-    
-    # Rest of the loading_data function remains the same...
-    # Extract product names and prices
+        # Important: Using find_element to get direct DOM element, NOT get_text
+        category_element = sb.find_element(".text-lg.font-bold.text-black")
+        category = category_element.text.strip()
+    except Exception:
+        category = "unknown"
+    print(category)
+
+    # Extract product and price elements using the same XPaths
     product_elements = sb.find_elements('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]')
     price_elements = sb.find_elements('//span[contains(@class, "text-base") and contains(@class, "leading-[1.5]") and contains(@class, "-tracking-[0.48px]")]')
-    
-    # ... existing code for processing products and prices ...
+
+    product_texts = []
+    for product in product_elements:
+        text = get_text_safe(product)
+        if text:
+            product_texts.append(text)
+            print(text)
+
+    price_texts = []
+    for price in price_elements:
+        text = get_text_safe(price)
+        if text:
+            price_texts.append(text)
+
+    # Append the extracted texts to the global lists
+    for text in product_texts:
+        product_names.append(text)
+        categories.append(category)
+    for text in price_texts:
+        prices.append(text)
 
 def getting_data(sb, url):
-    # Load the URL using UC mode's reconnect capability for better stealth
-    sb.uc_open_with_reconnect(url, 4)  # Attempt reconnection up to 4 times if needed
+    # Load the URL using SeleniumBase's functions
+    sb.open(url)
     sb.maximize_window()
     sb.execute_script("return document.body.scrollHeight")
     loading_data(sb)
 
-    # IMPROVED: Loop through pagination using a more reliable approach
-    page_num = 1
+    # Loop through pagination using the SAME logic that worked before
     while True:
-        print(f"Processing page {page_num}")
-        # Get all pagination tabs
+        # Get all pagination tabs using the same XPath
         tabs = sb.find_elements('//a[contains(@class, "cursor-pointer") and contains(@class, "px-2") and contains(@class, "text-xs")]')
         
-        # Use the original approach: Check if the last tab has ">" text
-        next_button = None
-        if tabs and len(tabs) > 0 and tabs[-1].text == ">":
-            next_button = tabs[-1]
+        # CRITICAL: Use the exact same check - if the last tab has ">" text
+        if tabs and tabs[-1].text == ">":
+            next_tab = tabs[-1]  # Get the last tab
             
-            # Get a reference product from current page
-            try:
-                first_product = sb.find_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]')
-                
-                # IMPORTANT: Wait for the button to be clickable before clicking
-                sb.wait_for_element_to_be_clickable('//a[contains(@class, "cursor-pointer") and contains(@class, "px-2") and contains(@class, "text-xs") and text()=">"]', timeout=10)
-                
-                # Click and wait for page change
-                print("Clicking next button")
-                next_button.click()
-                
-                # Wait for the page to update (similar to waiting for staleness)
-                sb.wait_for_staleness(first_product, timeout=15)
-                
-                # Add a short sleep to ensure page is fully loaded
-                time.sleep(2)
-                
-                # Load data from the new page
-                loading_data(sb)
-                page_num += 1
-            except Exception as e:
-                print(f"Error during pagination: {str(e)}")
-                break
+            # Store a reference to an element on the current page for staleness check
+            old_product = sb.find_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]')
+            
+            # Wait until the pagination button is clickable using the same XPath
+            sb.wait_for_element_clickable('//a[contains(@class, "cursor-pointer") and contains(@class, "px-2") and contains(@class, "text-xs")]', timeout=30)
+            
+            # Click the next tab
+            next_tab.click()
+            
+            # Wait for the page to change by checking for staleness of the old product
+            sb.wait_for_staleness(old_product, timeout=30)
+            
+            # Load data from the new page
+            loading_data(sb)
+            time.sleep(2)
         else:
-            print("No more pages or next button not found")
             break
 
 # Main execution
