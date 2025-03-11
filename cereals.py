@@ -74,31 +74,31 @@ def getting_data(sb, url):
     sb.execute_script("return document.body.scrollHeight")
     loading_data(sb)
 
-    # Loop through pagination using the SAME logic that worked before
+    # Loop through pagination
     while True:
         # Get all pagination tabs using the same XPath
         tabs = sb.find_elements('//a[contains(@class, "cursor-pointer") and contains(@class, "px-2") and contains(@class, "text-xs")]')
-        for tab in tabs:
-            print(tab)
-        last_tab_text = sb.execute_script("return arguments[0].textContent.trim()", tabs[-1])
-        if tabs and last_tab_text == ">":
-            next_tab = last_tab_text  # Get the last tab
+        
+        if tabs:
+            # Get the text content of the last tab using JavaScript
+            last_tab_text = sb.execute_script("return arguments[0].textContent.trim()", tabs[-1])
             
-            # Store a reference to an element on the current page for staleness check
-            old_product = sb.find_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]')
-            
-            # Wait until the pagination button is clickable using the same XPath
-            sb.wait_for_element_clickable('//a[contains(@class, "cursor-pointer") and contains(@class, "px-2") and contains(@class, "text-xs")]', timeout=30)
-            
-            # Click the next tab
-            next_tab.click()
-            
-            # Wait for the page to change by checking for staleness of the old product
-            sb.wait_for_staleness(old_product, timeout=30)
-            
-            # Load data from the new page
-            loading_data(sb)
-            time.sleep(2)
+            # Check if it contains the ">" character
+            if ">" in last_tab_text:
+                # Store a reference element for staleness check
+                old_product = sb.find_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]')
+                
+                # Click the next tab
+                tabs[-1].click()
+                
+                # Wait for the page to change
+                sb.wait_for_staleness(old_product, timeout=30)
+                
+                # Load data from the new page
+                loading_data(sb)
+                time.sleep(2)
+            else:
+                break
         else:
             break
 
