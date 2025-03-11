@@ -1,7 +1,7 @@
 name: scrape
 on:
   schedule:
-    - cron: '0 16 * * *'  # This is 20:00 GST (16:00 UTC)
+    - cron: '0 23 * * *'  # This is 20:00 GST (16:00 UTC)
   workflow_dispatch:  # Keep this to allow manual triggers
 jobs:
   scrape:
