@@ -80,9 +80,9 @@ def getting_data(sb, url):
         tabs = sb.find_elements('//a[contains(@class, "cursor-pointer") and contains(@class, "px-2") and contains(@class, "text-xs")]')
         for tab in tabs:
             print(tab)
-        # CRITICAL: Use the exact same check - if the last tab has ">" text
-        if tabs and tabs[-1].text == ">":
-            next_tab = tabs[-1]  # Get the last tab
+        last_tab_text = sb.execute_script("return arguments[0].textContent.trim()", tabs[-1])
+        if tabs and last_tab_text == ">":
+            next_tab = last_tab_text  # Get the last tab
             
             # Store a reference to an element on the current page for staleness check
             old_product = sb.find_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]')
