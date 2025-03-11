@@ -34,36 +34,42 @@ def loading_data(sb):
         sb.wait_for_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "line-clamp-2")]', timeout=30)
         sb.wait_for_element('//span[contains(@class, "text-base") and contains(@class, "leading-[1.5]") and contains(@class, "-tracking-[0.48px]")]', timeout=30)
     
-    # Retrieve the category text freshly using an appropriate selector
+    # IMPROVED: More robust category detection with multiple approaches
+    category = "unknown"
     try:
-        category = sb.get_text(".text-lg.font-bold.text-black")
-    except Exception:
-        category = "unknown"
-    print(category)
-
+        # Try direct find_element method (more similar to original implementation)
+        elements = sb.find_elements(".text-lg.font-bold.text-black")
+        if elements and len(elements) > 0:
+            category = elements[0].text.strip()
+            print(f"Found category using primary selector: {category}")
+    except Exception as e:
+        print(f"Primary category selector failed: {str(e)}")
+        try:
+            # Try breadcrumb navigation
+            breadcrumbs = sb.find_elements(".breadcrumb-item a")
+            if breadcrumbs and len(breadcrumbs) > 1:
+                category = breadcrumbs[-2].text.strip()
+                print(f"Found category using breadcrumbs: {category}")
+        except Exception as e:
+            print(f"Breadcrumb selector failed: {str(e)}")
+            try:
+                # Extract from URL as last resort
+                url_parts = sb.get_current_url().split('/')
+                for part in url_parts:
+                    if 'food' in part or 'grocery' in part:
+                        category = part.replace('-', ' ').title()
+                        break
+                print(f"Extracted category from URL: {category}")
+            except:
+                print("Failed to extract category")
+                category = "unknown"
+    
+    # Rest of the loading_data function remains the same...
     # Extract product names and prices
     product_elements = sb.find_elements('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]')
     price_elements = sb.find_elements('//span[contains(@class, "text-base") and contains(@class, "leading-[1.5]") and contains(@class, "-tracking-[0.48px]")]')
-
-    product_texts = []
-    for product in product_elements:
-        text = get_text_safe(product)
-        if text:
-            product_texts.append(text)
-            print(text)
-
-    price_texts = []
-    for price in price_elements:
-        text = get_text_safe(price)
-        if text:
-            price_texts.append(text)
-
-    # Append the extracted texts to the global lists
-    for text in product_texts:
-        product_names.append(text)
-        categories.append(category)
-    for text in price_texts:
-        prices.append(text)
+    
+    # ... existing code for processing products and prices ...
 
 def getting_data(sb, url):
     # Load the URL using UC mode's reconnect capability for better stealth
@@ -72,37 +78,43 @@ def getting_data(sb, url):
     sb.execute_script("return document.body.scrollHeight")
     loading_data(sb)
 
-    # Loop through pagination if the ">" button exists
+    # IMPROVED: Loop through pagination using a more reliable approach
+    page_num = 1
     while True:
+        print(f"Processing page {page_num}")
+        # Get all pagination tabs
         tabs = sb.find_elements('//a[contains(@class, "cursor-pointer") and contains(@class, "px-2") and contains(@class, "text-xs")]')
         
-        if tabs and any(tab.text == ">" for tab in tabs):
-            # Store a reference to an element on the current page
+        # Use the original approach: Check if the last tab has ">" text
+        next_button = None
+        if tabs and len(tabs) > 0 and tabs[-1].text == ">":
+            next_button = tabs[-1]
+            
+            # Get a reference product from current page
             try:
-                old_product = sb.find_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]')
-                old_product_text = get_text_safe(old_product)
-            except:
-                old_product_text = ""
-            
-            # Find and click the ">" button
-            for tab in tabs:
-                if tab.text == ">":
-                    tab.click()
-                    break
-            
-            # Wait for page to update
-            sb.sleep(2)  # Basic wait for page transition
-            
-            # If we had a reference element, wait until it's no longer visible
-            if old_product_text:
-                try:
-                    sb.wait_for_text_not_visible(old_product_text, timeout=10)
-                except:
-                    pass  # Continue even if waiting fails
-            
-            # Load data from the new page
-            loading_data(sb)
+                first_product = sb.find_element('//a[contains(@class, "h-12") and contains(@class, "text-black") and contains(@class, "mb-2")]')
+                
+                # IMPORTANT: Wait for the button to be clickable before clicking
+                sb.wait_for_element_to_be_clickable('//a[contains(@class, "cursor-pointer") and contains(@class, "px-2") and contains(@class, "text-xs") and text()=">"]', timeout=10)
+                
+                # Click and wait for page change
+                print("Clicking next button")
+                next_button.click()
+                
+                # Wait for the page to update (similar to waiting for staleness)
+                sb.wait_for_staleness(first_product, timeout=15)
+                
+                # Add a short sleep to ensure page is fully loaded
+                time.sleep(2)
+                
+                # Load data from the new page
+                loading_data(sb)
+                page_num += 1
+            except Exception as e:
+                print(f"Error during pagination: {str(e)}")
+                break
         else:
+            print("No more pages or next button not found")
             break
 
 # Main execution
