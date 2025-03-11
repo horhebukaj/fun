@@ -38,9 +38,8 @@ def loading_data(sb):
     # Using the exact same category selector that worked before
     try:
         # Important: Using find_element to get direct DOM element, NOT get_text
-        category_element = sb.find_element(".text-lg.font-bold.text-black")
-        category = category_element.text.strip()
-    except Exception:
+        category = sb.execute_script("return document.querySelector('.text-lg.font-bold.text-black').textContent.trim();")
+    except:
         category = "unknown"
     print(category)
 
@@ -79,7 +78,8 @@ def getting_data(sb, url):
     while True:
         # Get all pagination tabs using the same XPath
         tabs = sb.find_elements('//a[contains(@class, "cursor-pointer") and contains(@class, "px-2") and contains(@class, "text-xs")]')
-        
+        for tab in tabs:
+            print(tab)
         # CRITICAL: Use the exact same check - if the last tab has ">" text
         if tabs and tabs[-1].text == ">":
             next_tab = tabs[-1]  # Get the last tab
